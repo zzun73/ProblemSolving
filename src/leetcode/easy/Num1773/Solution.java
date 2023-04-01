@@ -1,4 +1,4 @@
-package leetcode.easy.Num1733;
+package leetcode.easy.Num1773;
 
 import java.util.List;
 
