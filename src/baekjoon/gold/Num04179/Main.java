@@ -1,4 +1,4 @@
-package baekjoon.silver.Num04179;
+package baekjoon.gold.Num04179;
 
 import java.io.*;
 import java.util.ArrayDeque;
@@ -30,11 +30,11 @@ public class Main {
             for (int i = 0; i < dx.length; i++) {
                 int nx = dx[i] + fireCur.x;
                 int ny = dy[i] + fireCur.y;
-                if (nx < 0 || nx >= R || ny < 0 || ny >= C || board[nx][ny] == '#' || board[nx][ny] == 'm' || times[nx][ny] != Integer.MAX_VALUE) {
+                if (nx < 0 || nx >= R || ny < 0 || ny >= C || board[nx][ny] == '#' || board[nx][ny] == 'f' || times[nx][ny] != Integer.MAX_VALUE) {
                     continue;
                 }
                 times[nx][ny] = fireCur.time + 1;
-                board[nx][ny] = 'm';
+                board[nx][ny] = 'f';
                 fire.add(new Pos(nx, ny, fireCur.time + 1));
 
             }
@@ -49,10 +49,10 @@ public class Main {
                 int nx = dx[i] + personCur.x;
                 int ny = dy[i] + personCur.y;
 
-                if (nx < 0 || nx >= R || ny < 0 || ny >= C || board[nx][ny] == '#' || board[nx][ny] == 'F' || board[nx][ny] == '1' || personCur.time >= times[nx][ny]) {
+                if (nx < 0 || nx >= R || ny < 0 || ny >= C || board[nx][ny] == '#' || board[nx][ny] == 'F' || board[nx][ny] == 'p' || personCur.time >= times[nx][ny]) {
                     continue;
                 }
-                board[nx][ny] = '1';
+                board[nx][ny] = 'p';
                 person.add(new Pos(nx, ny, personCur.time + 1));
             }
         }
@@ -90,7 +90,7 @@ public class Main {
                 if (input[j] == 'J') {
                     person.add(new Pos(i, j, 0));
                 } else if (input[j] == 'F') {
-                    board[i][j] = 'm';
+                    board[i][j] = 'f';
                     times[i][j] = 0;
                     fire.add(new Pos(i, j, 0));
                 }
