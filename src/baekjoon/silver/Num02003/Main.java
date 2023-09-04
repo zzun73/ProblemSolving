@@ -12,27 +12,25 @@ public class Main {
         st = new StringTokenizer(br.readLine(), " ");
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int[] arr = new int[N];
+        int[] arr = new int[N + 1];
 
         st = new StringTokenizer(br.readLine(), " ");
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int start = 0, end = 0, cur = 0, answer = 0;
-        while (start < N && end < N) {
-            cur += arr[end++];
-            if (cur > M) {
-                while (cur > M) {
-                    cur -= arr[start++];
-                }
+        int start = 0, end = 0, sum = 0, answer = 0;
+        while (end <= N) {
+            if (sum >= M) {
+                sum -= arr[start++];
+            } else {
+                sum += arr[end++];
             }
 
-            if (cur == M) {
+            if (sum == M) {
                 answer++;
             }
         }
-
         bw.write(answer + "");
 
         br.close();
