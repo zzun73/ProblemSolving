@@ -1,4 +1,4 @@
-package baekjoon.bronze.Num02563;
+package baekjoon.silver.Num02563;
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -6,6 +6,8 @@ import java.util.StringTokenizer;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         int answer = 0, size = 10;
         int N = Integer.parseInt(br.readLine());
         boolean[][] grid = new boolean[101][101];
@@ -24,8 +26,9 @@ public class Main {
                 }
             }
         }
-
-        System.out.print(answer);
+        bw.write(String.valueOf(answer));
         br.close();
+        bw.flush();
+        bw.close();
     }
 }
