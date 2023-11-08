@@ -1,61 +1,81 @@
 package baekjoon.silver.Num01012;
 
 import java.io.*;
+import java.util.ArrayDeque;
 import java.util.StringTokenizer;
 
+class Pos {
+    int x;
+    int y;
+
+    public Pos(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
 public class Main {
+    static int M, N;
     static int[][] arr;
-    static int M, N, K;
-    static int count;
+    static int[] dx = new int[]{1, -1, 0, 0};
+    static int[] dy = new int[]{0, 0, 1, -1};
 
     public static void helper(int x, int y) {
-        if (x < 0 || x > M - 1 || y < 0 || y > N - 1 || arr[x][y] == 0) {
-            return;
-        }
+        ArrayDeque<Pos> deque = new ArrayDeque<>();
+        deque.add(new Pos(x, y));
         arr[x][y] = 0;
-        count++;
-        helper(x + 1, y);
-        helper(x - 1, y);
-        helper(x, y + 1);
-        helper(x, y - 1);
 
+        while (!deque.isEmpty()) {
+            Pos cur = deque.poll();
+            for (int i = 0; i < dx.length; i++) {
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
+
+                if (nx < 0 || nx > M - 1 || ny < 0 || ny > N - 1 || arr[nx][ny] == 0) {
+                    continue;
+                }
+                deque.add(new Pos(nx, ny));
+                arr[nx][ny] = 0;
+            }
+        }
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
 
         int T = Integer.parseInt(br.readLine());
-        for (int t = 0; t < T; t++) {
+        while (T-- > 0) {
             st = new StringTokenizer(br.readLine(), " ");
             M = Integer.parseInt(st.nextToken());
             N = Integer.parseInt(st.nextToken());
-            K = Integer.parseInt(st.nextToken());
-            arr = new int[M][N];
+            int K = Integer.parseInt(st.nextToken());
 
-            for (int i = 0; i < K; i++) {
+            arr = new int[M][N];
+            for (int k = 0; k < K; k++) {
                 st = new StringTokenizer(br.readLine(), " ");
-                int x = Integer.parseInt(st.nextToken());
-                int y = Integer.parseInt(st.nextToken());
-                arr[x][y] = 1;
+                int X = Integer.parseInt(st.nextToken());
+                int Y = Integer.parseInt(st.nextToken());
+                arr[X][Y] = 1;
             }
+
             int answer = 0;
             for (int i = 0; i < M; i++) {
                 for (int j = 0; j < N; j++) {
-                    count = 0;
-                    helper(i, j);
-                    if (count != 0) {
+                    if (arr[i][j] == 1) {
+                        helper(i, j);
                         answer++;
                     }
                 }
             }
-            bw.write(answer + "\n");
+            sb.append(answer).append("\n");
         }
+        bw.write(sb.toString());
 
         br.close();
         bw.flush();
         bw.close();
     }
 }
-
