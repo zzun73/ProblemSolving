@@ -5,46 +5,47 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 
 public class Solution {
-    private static final int SIZE = 9;
+    private static final int BOARD_SIZE = 9;
+    private static final int BOX_SIZE = 3;
     static int[][] board;
     static HashSet<Integer> set;
 
-    public static boolean rowCheck() {
-        for (int i = 0; i < SIZE; i++) {
+    static boolean rowCheck() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             set.clear();
-            for (int j = 0; j < SIZE; j++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 set.add(board[i][j]);
             }
-            if (set.size() != SIZE) {
+            if (set.size() != BOARD_SIZE) {
                 return false;
             }
         }
         return true;
     }
 
-    public static boolean colCheck() {
-        for (int i = 0; i < SIZE; i++) {
+    static boolean colCheck() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             set.clear();
-            for (int j = 0; j < SIZE; j++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 set.add(board[j][i]);
             }
-            if (set.size() != SIZE) {
+            if (set.size() != BOARD_SIZE) {
                 return false;
             }
         }
         return true;
     }
 
-    public static boolean boxCheck() {
-        for (int i = 0; i < SIZE; i += 3) {
-            for (int j = 0; j < SIZE; j += 3) {
+    static boolean boxCheck() {
+        for (int i = 0; i < BOARD_SIZE; i += BOX_SIZE) {
+            for (int j = 0; j < BOARD_SIZE; j += BOX_SIZE) {
                 set.clear();
-                for (int k = i; k < i + 3; k++) {
-                    for (int l = j; l < j + 3; l++) {
+                for (int k = i; k < i + BOX_SIZE; k++) {
+                    for (int l = j; l < j + BOX_SIZE; l++) {
                         set.add(board[k][l]);
                     }
                 }
-                if (set.size() != SIZE) {
+                if (set.size() != BOARD_SIZE) {
                     return false;
                 }
             }
@@ -63,9 +64,9 @@ public class Solution {
             board = new int[9][9];
             set = new HashSet<>();
 
-            for (int i = 0; i < SIZE; i++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 st = new StringTokenizer(br.readLine(), " ");
-                for (int j = 0; j < SIZE; j++) {
+                for (int j = 0; j < BOARD_SIZE; j++) {
                     board[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
