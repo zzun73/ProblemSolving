@@ -1,46 +1,53 @@
 package baekjoon.gold.Num02493;
 
 import java.io.*;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.util.*;
+
+class Top {
+    int height;
+    int idx;
+
+    public Top(int height, int idx) {
+        super();
+        this.height = height;
+        this.idx = idx;
+    }
+
+}
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    static int N;
+    static Deque<Top> prev;
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
         StringTokenizer st;
 
-        int N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
+        prev = new ArrayDeque<>();
         st = new StringTokenizer(br.readLine(), " ");
-        StringBuilder sb = new StringBuilder();
-        Stack<int[]> stack = new Stack<>();
+        for (int i = 0; i < N; i++) {
+            Top cur = new Top(Integer.parseInt(st.nextToken()), i + 1); // 입력 순서대로
 
-        stack.push(new int[]{Integer.parseInt(st.nextToken()), 1});
-        sb.append(0).append(" ");
-        for (int i = 1; i < N; i++) {
-            int cur = Integer.parseInt(st.nextToken());
-            int idx = i + 1;
-
-            while (!stack.isEmpty()) {
-
-                if (stack.peek()[0] > cur) {
-                    sb.append(stack.peek()[1]).append(" ");
-                    stack.push(new int[]{cur, idx});
-                    break;
-                } else {
-                    stack.pop();
-                }
+            // 탑이 남아 있으면서 내가 레이저 쐈을 때 닿지 않는 탑들 제거 (나보다 낮은 탑들)
+            while (!prev.isEmpty() && prev.peekLast().height < cur.height) {
+                prev.pollLast();
             }
-            if (stack.isEmpty()) {
+
+            if (prev.isEmpty()) { // 왼쪽에 탑이 없을 경우 0
                 sb.append(0).append(" ");
-                stack.push(new int[]{cur, idx});
+            } else {
+                sb.append(prev.peekLast().idx).append(" "); // 레이저 수신했을 경우
             }
+
+            prev.addLast(cur); // 이전 탑들에 추가
 
         }
-
         bw.write(sb.toString());
+
         br.close();
-        bw.flush();
         bw.close();
     }
 }
