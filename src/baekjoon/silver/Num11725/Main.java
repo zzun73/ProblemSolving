@@ -1,23 +1,25 @@
 package baekjoon.silver.Num11725;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
+
 
 public class Main {
+    static int N, A, B;
+    static List<Integer>[] lists;
     static int[] answer;
     static boolean[] visited;
 
-    public static void helper(List<List<Integer>> list, int start) {
-        if (visited[start]) {
+    static void helper(int cur) {
+        if (visited[cur]) {
             return;
         }
-        visited[start] = true;
-        for (int val : list.get(start)) {
-            if (!visited[val]) {
-                answer[val] = start;
-                helper(list, val);
+
+        visited[cur] = true;
+        for (Integer next : lists[cur]) {
+            if (!visited[next]) {
+                answer[next] = cur;
+                helper(next);
             }
         }
     }
@@ -26,32 +28,31 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
-
-        int N = Integer.parseInt(br.readLine());
-        answer = new int[N + 1];
-        visited = new boolean[N + 1];
-        List<List<Integer>> list = new ArrayList<>();
-        for (int i = 0; i < answer.length; i++) {
-            list.add(new ArrayList<>());
-        }
-        for (int i = 1; i < answer.length - 1; i++) {
-            st = new StringTokenizer(br.readLine(), " ");
-            int v1 = Integer.parseInt(st.nextToken());
-            int v2 = Integer.parseInt(st.nextToken());
-            list.get(v1).add(v2);
-            list.get(v2).add(v1);
-        }
-
-        helper(list, 1);
-
         StringBuilder sb = new StringBuilder();
-        for (int i = 2; i < answer.length; i++) {
+
+        N = Integer.parseInt(br.readLine());
+        lists = new ArrayList[N + 1];
+        visited = new boolean[N + 1];
+        answer = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            lists[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < N - 1; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            A = Integer.parseInt(st.nextToken());
+            B = Integer.parseInt(st.nextToken());
+            lists[A].add(B);
+            lists[B].add(A);
+        }
+
+        helper(1);
+
+        for (int i = 2; i <= N; i++) {
             sb.append(answer[i]).append("\n");
         }
         bw.write(sb.toString());
 
         br.close();
-        bw.flush();
         bw.close();
     }
 }
