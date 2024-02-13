@@ -11,10 +11,6 @@ public class Main {
     static boolean[] visited;
 
     static void helper(int cur) {
-        if (visited[cur]) {
-            return;
-        }
-
         visited[cur] = true;
         for (Integer next : lists[cur]) {
             if (!visited[next]) {
