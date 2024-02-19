@@ -4,46 +4,47 @@ import java.io.*;
 import java.util.*;
 
 class Edge implements Comparable<Edge> {
-    int targetId, cost;
+    int target, weight;
 
-    public Edge(int targetId, int cost) {
-        this.targetId = targetId;
-        this.cost = cost;
+    public Edge(int target, int weight) {
+        this.target = target;
+        this.weight = weight;
     }
 
     @Override
-    public int compareTo(Edge e) {
-        return this.cost - e.cost;
+    public int compareTo(Edge o) {
+        return this.weight - o.weight;
     }
 }
 
 public class Main {
     private static final int INF = Integer.MAX_VALUE;
-    static int N;
+    static int V, E, K, u, v, w;
     static List<Edge>[] list;
     static int[] distance;
+    static PriorityQueue<Edge> pq;
 
-    private static void dijkstra(int startId) {
-        distance[startId] = 0;
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
-        pq.offer(new Edge(startId, distance[startId]));
+    static void helper() {
+        Arrays.fill(distance, INF);
+        distance[K] = 0;
+        pq.add(new Edge(K, distance[K]));
 
         while (!pq.isEmpty()) {
             Edge cur = pq.poll();
 
-            System.out.println(cur.cost + "   " + distance[cur.targetId]);
-            if (cur.cost != distance[cur.targetId]) {
+            if (cur.weight > distance[cur.target]) {
                 continue;
             }
 
-            for (Edge next : list[cur.targetId]) {
-                if (distance[next.targetId] > cur.cost + next.cost) {
-                    distance[next.targetId] = cur.cost + next.cost;
-                    pq.offer(new Edge(next.targetId, distance[next.targetId]));
+            for (Edge next : list[cur.target]) {
+                int weightSum = next.weight + cur.weight;
+
+                if (weightSum < distance[next.target]) {
+                    distance[next.target] = weightSum;
+                    pq.add(new Edge(next.target, weightSum));
                 }
             }
         }
-
     }
 
     public static void main(String[] args) throws IOException {
@@ -53,37 +54,35 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         st = new StringTokenizer(br.readLine(), " ");
-        N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int startId = Integer.parseInt(br.readLine());
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(br.readLine()) - 1;
+        list = new ArrayList[V];
+        distance = new int[V];
+        pq = new PriorityQueue<>();
 
-        list = new ArrayList[N + 1];
-        for (int i = 1; i <= N; i++) {
+        for (int i = 0; i < list.length; i++) {
             list[i] = new ArrayList<>();
         }
 
-        distance = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            distance[i] = INF;
-        }
-
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < E; i++) {
             st = new StringTokenizer(br.readLine(), " ");
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            list[a].add(new Edge(b, c));
+            u = Integer.parseInt(st.nextToken()) - 1;
+            v = Integer.parseInt(st.nextToken()) - 1;
+            w = Integer.parseInt(st.nextToken());
+
+            list[u].add(new Edge(v, w));
         }
 
-        dijkstra(startId);
+        helper();
 
-        for (int i = 1; i <= N; i++) {
-            sb.append(distance[i] == INF ? "INF" : distance[i]).append("\n");
+        for (int val : distance) {
+            sb.append(val == INF ? "INF" : val).append("\n");
         }
+
         bw.write(sb.toString());
 
         br.close();
-        bw.flush();
         bw.close();
     }
 }
