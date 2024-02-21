@@ -1,10 +1,7 @@
 package baekjoon.gold.Num01759;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
     static int L, C;
@@ -24,13 +21,9 @@ public class Main {
         }
 
         for (int i = start; i < C; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                path.add(password[i]);
-                helper(depth + 1, i + 1);
-                path.remove(path.size() - 1);
-                visited[i] = false;
-            }
+            path.add(password[i]);
+            helper(depth + 1, i + 1);
+            path.remove(path.size() - 1);
         }
     }
 
@@ -46,11 +39,7 @@ public class Main {
             }
         }
 
-        if (mo >= 1 && ja >= 2) {
-            return true;
-        } else {
-            return false;
-        }
+        return mo >= 1 && ja >= 2;
     }
 
     public static void main(String[] args) throws IOException {
