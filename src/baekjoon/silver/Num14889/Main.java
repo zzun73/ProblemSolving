@@ -1,45 +1,53 @@
 package baekjoon.silver.Num14889;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
+    static int N, middle, idxA, idxB, sumA, sumB, answer;
     static int[][] arr;
+    static int[] A, B;
     static boolean[] visited;
-    static int N, answer;
 
-    public static void helper(int depth, int start) {
+    static void helper(int depth, int start) {
         if (answer == 0) {
             return;
         }
-        if (depth == N / 2) {
-            int[] teamA = new int[N / 2];
-            int[] teamB = new int[N / 2];
-            int idxA, idxB, sumA, sumB;
-            sumA = sumB = idxA = idxB = 0;
-            for (int i = 0; i < N; i++) {
-                if (visited[i]) {
-                    teamA[idxA++] = i;
-                } else {
-                    teamB[idxB++] = i;
-                }
-            }
 
-            for (int i = 0; i < N / 2; i++) {
-                for (int j = i + 1; j < N / 2; j++) {
-                    sumA += (arr[teamA[i]][teamA[j]] + arr[teamA[j]][teamA[i]]);
-                    sumB += (arr[teamB[i]][teamB[j]] + arr[teamB[j]][teamB[i]]);
-                }
-            }
-            answer = Math.min(answer, Math.abs(sumA - sumB));
+        if (depth == middle) {
+            setTeam();
+            calcAbility();
             return;
         }
 
-        for (int i = start + 1; i < N; i++) {
+        for (int i = start; i < N; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                helper(depth + 1, i);
+                helper(depth + 1, i + 1);
                 visited[i] = false;
+            }
+        }
+    }
+
+    static void calcAbility() {
+        for (int i = 0; i < middle - 1; i++) {
+            for (int j = i + 1; j < middle; j++) {
+                sumA += arr[A[i]][A[j]] + arr[A[j]][A[i]];
+                sumB += arr[B[i]][B[j]] + arr[B[j]][B[i]];
+            }
+        }
+        answer = Math.min(answer, Math.abs(sumA - sumB));
+    }
+
+    static void setTeam() {
+        A = new int[middle];
+        B = new int[middle];
+        idxA = idxB = sumA = sumB = 0;
+        for (int i = 0; i < N; i++) {
+            if (visited[i]) {
+                A[idxA++] = i;
+            } else {
+                B[idxB++] = i;
             }
         }
     }
@@ -50,21 +58,22 @@ public class Main {
         StringTokenizer st;
 
         N = Integer.parseInt(br.readLine());
-        answer = Integer.MAX_VALUE;
         arr = new int[N][N];
         visited = new boolean[N];
+        answer = Integer.MAX_VALUE;
+        middle = N / 2;
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine(), " ");
             for (int j = 0; j < N; j++) {
                 arr[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        helper(0, 0);
 
-        bw.write(answer + "");
+        helper(0, 0);
+        bw.write(String.valueOf(answer));
 
         br.close();
-        bw.flush();
         bw.close();
     }
 }
