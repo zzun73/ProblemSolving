@@ -1,45 +1,51 @@
 package baekjoon.silver.Num01931;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+
+class Task implements Comparable<Task> {
+    int start, end;
+
+    public Task(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    public int compareTo(Task o) {
+        if (this.end == o.end) {
+            return this.start - o.start;
+        }
+        return this.end - o.end;
+    }
+}
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
 
         int N = Integer.parseInt(br.readLine());
-        int[][] time = new int[N][2];
+        PriorityQueue<Task> pq = new PriorityQueue<>();
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine(), " ");
-            time[i][0] = Integer.parseInt(st.nextToken());
-            time[i][1] = Integer.parseInt(st.nextToken());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+            pq.add(new Task(s, e));
         }
 
-        Arrays.sort(time, (o1, o2) -> {
-            if (o1[1] == o2[1]) {
-            return o1[0] - o2[0];
-        } else {
-            return o1[1] - o2[1];
-        }
-    });
-
-    int answer = 1;
-        int cur = time[0][1];
-        for (int i = 1; i < N; i++) {
-            if (cur > time[i][0]) {
-                continue;
+        int time = 0, answer = 0;
+        while (!pq.isEmpty()) {
+            Task cur = pq.poll();
+            if (time <= cur.start) {
+                time = cur.end;
+                answer++;
             }
-            cur = time[i][1];
-            answer++;
         }
-
-        bw.write(answer + "");
+        bw.write(String.valueOf(answer));
 
         br.close();
-        bw.flush();
         bw.close();
     }
 }
