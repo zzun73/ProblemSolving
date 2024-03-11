@@ -3,43 +3,42 @@ package baekjoon.gold.Num02573;
 import java.io.*;
 import java.util.*;
 
-class Node {
-    int x, y;
-
-    Node(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
 public class Main {
     static int N, M;
-    static int[][] board;
-    static int[][] height;
+    static int[][] board, height;
     static boolean[][] visited;
     static int[] dx = new int[]{1, -1, 0, 0};
     static int[] dy = new int[]{0, 0, 1, -1};
-    static ArrayDeque<Node> deque;
+    static ArrayDeque<Pos> deque;
+
+    static class Pos {
+        int x, y;
+
+        Pos(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     static boolean helper() {
         while (!deque.isEmpty()) {
-            Node node = deque.poll();
+            Pos cur = deque.poll();
             for (int i = 0; i < dx.length; i++) {
-                int nx = node.x + dx[i];
-                int ny = node.y + dy[i];
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
 
-                if (nx < 0 || nx > N - 1 || ny < 0 || ny > M - 1 || board[nx][ny] != 0) {
+                if (nx < 0 || nx > N - 1 || ny < 0 || ny > M - 1 || board[nx][ny] > 0) {
                     continue;
                 }
-                height[node.x][node.y]++;
+                height[cur.x][cur.y]++;
             }
         }
 
-        minusIceHeigh();
+        updateIceHeight();
         return calcIceSet();
     }
 
-    private static void minusIceHeigh() {
+    static void updateIceHeight() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 board[i][j] -= height[i][j];
@@ -51,21 +50,24 @@ public class Main {
         }
     }
 
-    private static boolean calcIceSet() {
+    static boolean calcIceSet() {
         visited = new boolean[N][M];
         int count = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (board[i][j] > 0 && !visited[i][j]) {
-                    checkIce(i, j);
+                    markIce(i, j);
                     count++;
+                    if (count >= 2) {
+                        return true;
+                    }
                 }
             }
         }
-        return count >= 2;
+        return false;
     }
 
-    private static void checkIce(int x, int y) {
+    static void markIce(int x, int y) {
         if (visited[x][y]) {
             return;
         }
@@ -78,16 +80,15 @@ public class Main {
             if (nx < 0 || nx > N - 1 || ny < 0 || ny > M - 1 || visited[nx][ny] || board[x][y] == 0) {
                 continue;
             }
-            checkIce(nx, ny);
+            markIce(nx, ny);
         }
-
     }
 
     private static void findIce() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (board[i][j] > 0) {
-                    deque.add(new Node(i, j));
+                    deque.add(new Pos(i, j));
                 }
             }
         }
@@ -124,11 +125,12 @@ public class Main {
                 break;
             }
 
-            if (helper()) break;
+            if (helper()) {
+                break;
+            }
         }
         bw.write(String.valueOf(year));
 
-        bw.flush();
         bw.close();
         br.close();
     }
