@@ -12,12 +12,13 @@ public class Main {
             this.end = end;
         }
 
+        public int getEnd() {
+            return end;
+        }
+
         @Override
         public int compareTo(Lecture o) {
-            if (this.end == o.end) {
-                return this.start - o.start;
-            }
-            return this.end - o.end;
+            return this.start - o.start;
         }
     }
 
@@ -27,7 +28,7 @@ public class Main {
         StringTokenizer st;
 
         int N = Integer.parseInt(br.readLine());
-        List<Lecture> lectures = new ArrayList<Lecture>();
+        List<Lecture> lectures = new ArrayList<>();
 
         while (N-- > 0) {
             st = new StringTokenizer(br.readLine(), " ");
@@ -38,6 +39,7 @@ public class Main {
         }
         Collections.sort(lectures);
 
+        int answer = 1;
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         pq.add(lectures.get(0).end);
         for (int i = 1; i < lectures.size(); i++) {
@@ -45,10 +47,10 @@ public class Main {
                 pq.poll();
             }
             pq.add(lectures.get(i).end);
-
+            answer = Math.max(answer, pq.size());
         }
 
-        bw.write(String.valueOf(pq.size()));
+        bw.write(String.valueOf(answer));
 
         br.close();
         bw.close();
