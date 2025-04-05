@@ -1,44 +1,45 @@
 package baekjoon.silver.Num01260;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    public static int[][] arr;
-    public static boolean[] visited;
-    public static StringBuilder sb;
+    static List<Integer>[] edges;
+    static boolean[] visited;
+    static StringBuilder sb = new StringBuilder();
 
-    public static void dfs(int start) {
-        visited[start] = true;
-        sb.append(start).append(" ");
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[start][i] == 1 && !visited[i]) {
-                dfs(i);
+    static void dfs(int v) {
+        sb.append(v).append(" ");
+        visited[v] = true;
+
+        for (int next : edges[v]) {
+            if (!visited[next]) {
+                dfs(next);
             }
         }
     }
 
-    public static void bfs(int start) {
-        Queue<Integer> queue = new LinkedList<>();
-        visited[start] = true;
-        queue.add(start);
+    static void bfs(int v) {
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.add(v);
+        visited[v] = true;
+        sb.append(v).append(" ");
 
-        while (!queue.isEmpty()) {
-            int v = queue.poll();
-            sb.append(v).append(" ");
-            for (int i = 1; i < arr.length; i++) {
-                if (arr[v][i] == 1 && !visited[i]) {
-                    visited[i] = true;
-                    queue.add(i);
+        while (!deque.isEmpty()) {
+            int cur = deque.poll();
+
+            for (int next : edges[cur]) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    deque.add(next);
+                    sb.append(next).append(" ");
                 }
             }
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String args[]) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
@@ -48,25 +49,33 @@ public class Main {
         int M = Integer.parseInt(st.nextToken());
         int V = Integer.parseInt(st.nextToken());
 
-        arr = new int[N + 1][N + 1];
+        edges = new ArrayList[N + 1];
         visited = new boolean[N + 1];
-        sb = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
+            edges[i] = new ArrayList<Integer>();
+        }
+
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine(), " ");
-            int e1 = Integer.parseInt(st.nextToken());
-            int e2 = Integer.parseInt(st.nextToken());
-            arr[e1][e2] = 1;
-            arr[e2][e1] = 1;
+            int v1 = Integer.parseInt(st.nextToken());
+            int v2 = Integer.parseInt(st.nextToken());
+            edges[v1].add(v2);
+            edges[v2].add(v1);
         }
+
+        for (int i = 1; i <= N; i++) {
+            Collections.sort(edges[i]);
+        }
+
         dfs(V);
-        Arrays.fill(visited, false);
+        visited = new boolean[N + 1];
         sb.append("\n");
         bfs(V);
 
         bw.write(sb.toString());
 
         br.close();
-        bw.flush();
         bw.close();
     }
 }
+

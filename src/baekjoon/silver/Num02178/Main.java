@@ -1,62 +1,61 @@
 package baekjoon.silver.Num02178;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
+    static int N, M;
+    static int[][] map;
+    static int[] dx = new int[]{-1, 1, 0, 0};
+    static int[] dy = new int[]{0, 0, -1, 1};
 
-    static int[][] arr;
-    static boolean[][] visited;
-    static int[] dx = {1, -1, 0, 0};
-    static int[] dy = {0, 0, 1, -1};
+    static int helper() {
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.add(new int[]{0, 0, 1});
+        map[0][0] = 0;
 
-    public static void helper(int x, int y) {
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{x, y});
-        visited[x][y] = true;
+        while (!deque.isEmpty()) {
+            int[] cur = deque.poll();
+            if (cur[0] == N - 1 && cur[1] == M - 1) {
+                return cur[2];
+            }
 
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
-            int cx = cur[0];
-            int cy = cur[1];
             for (int i = 0; i < dx.length; i++) {
-                int nx = cx + dx[i];
-                int ny = cy + dy[i];
-                if (nx < 0 || nx > arr.length - 1 || ny < 0 || ny > arr[0].length - 1 || visited[nx][ny] || arr[nx][ny] == 0) {
+                int nx = cur[0] + dx[i];
+                int ny = cur[1] + dy[i];
+
+                if (nx < 0 || nx > N - 1 || ny < 0 || ny > M - 1 || map[nx][ny] == 0) {
                     continue;
                 }
-                q.add(new int[]{nx, ny});
-                arr[nx][ny] = arr[cx][cy] + 1;
-                visited[nx][ny] = true;
+                map[nx][ny] = 0;
+                deque.add(new int[]{nx, ny, cur[2] + 1});
             }
         }
+
+        return -1;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String args[]) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine(), " ");
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        arr = new int[N][M];
-        visited = new boolean[N][M];
+        map = new int[N][M];
         for (int i = 0; i < N; i++) {
-            char[] ch = br.readLine().toCharArray();
+            char[] input = br.readLine().toCharArray();
             for (int j = 0; j < M; j++) {
-                arr[i][j] = ch[j] - '0';
+                map[i][j] = input[j] - '0';
             }
         }
 
-        helper(0, 0);
-        bw.write(arr[N - 1][M - 1] + "");
+        bw.write(String.valueOf(helper()));
 
         br.close();
-        bw.flush();
         bw.close();
     }
 }
