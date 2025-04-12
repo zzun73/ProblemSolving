@@ -1,30 +1,32 @@
 package baekjoon.silver.Num15652;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
+    static int N, M;
     static int[] arr;
     static StringBuilder sb = new StringBuilder();
-    static int N, M;
 
-    public static void helper(int depth, int start) {
+    static void helper(int start, int depth) {
         if (depth == M) {
-            for (int value : arr) {
-                sb.append(value).append(" ");
+            for (int val : arr) {
+                sb.append(val).append(" ");
             }
             sb.append("\n");
             return;
         }
 
-        for (int i = start; i < N; i++) {
-            arr[depth] = i + 1;
-            helper(depth + 1, i);
+        for (int i = start; i <= N; i++) {
+            arr[depth] = i;
+            helper(i, depth + 1);
         }
     }
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine(), " ");
@@ -32,10 +34,11 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
 
         arr = new int[M];
+        helper(1, 0);
 
-        helper(0, 0);
-        System.out.println(sb);
+        bw.write(sb.toString());
 
         br.close();
+        bw.close();
     }
 }

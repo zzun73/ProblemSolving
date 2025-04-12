@@ -1,55 +1,55 @@
 package baekjoon.silver.Num15664;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
+    static int N, M;
     static int[] arr, path;
-    static boolean[] visited;
     static StringBuilder sb = new StringBuilder();
-    static int N, M, prev;
 
-    public static void helper(int depth, int start) {
+    static void helper(int start, int depth) {
         if (depth == M) {
-            for (int value : arr) {
-                sb.append(value).append(" ");
+            for (int val : path) {
+                sb.append(val).append(" ");
             }
             sb.append("\n");
             return;
         }
 
+        int prev = -1;
         for (int i = start; i < N; i++) {
-            if (visited[i] || prev == path[i]) {
-                continue;
+            if (prev != arr[i]) {
+                path[depth] = arr[i];
+                helper(i + 1, depth + 1);
+                prev = path[depth];
             }
-            visited[i] = true;
-            arr[depth] = path[i];
-            helper(depth + 1, i + 1);
-            visited[i] = false;
-            prev = path[i];
         }
     }
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine(), " ");
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        arr = new int[M];
-        path = new int[N];
-        visited = new boolean[N];
 
+        arr = new int[N];
+        path = new int[M];
         st = new StringTokenizer(br.readLine(), " ");
         for (int i = 0; i < N; i++) {
-            path[i] = Integer.parseInt(st.nextToken());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(path);
+        Arrays.sort(arr);
+
         helper(0, 0);
-        System.out.println(sb);
+
+        bw.write(sb.toString());
 
         br.close();
+        bw.close();
     }
 }
