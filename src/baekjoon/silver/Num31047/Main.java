@@ -14,7 +14,7 @@ public class Main {
 
         while (T-- > 0) {
             int N = Integer.parseInt(br.readLine());
-            Map<String, Integer> map = new TreeMap<>();
+            Map<String, Integer> map = new HashMap<>();
             while (N-- > 0) {
                 st = new StringTokenizer(br.readLine(), " ");
                 String key = st.nextToken();
