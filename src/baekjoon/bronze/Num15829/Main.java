@@ -17,12 +17,13 @@ public class Main {
         int L = Integer.parseInt(br.readLine());
         String str = br.readLine();
         long answer = 0;
+        long pow = 1;
         for (int i = 0; i < L; i++) {
-            answer += (long) (alphabet[str.charAt(i) - 'a'] * Math.pow(r, i)) % M;
-            answer %= M;
+            answer = (answer + alphabet[str.charAt(i) - 'a'] * pow % M) % M;
+            pow = (pow * r) % M;
         }
 
-        bw.write(String.valueOf(answer % M));
+        bw.write(String.valueOf(answer));
 
         br.close();
         bw.close();
