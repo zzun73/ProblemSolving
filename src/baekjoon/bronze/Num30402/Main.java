@@ -8,19 +8,38 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String answer = "";
-        for (int i = 0; i < 15; i++) {
-            for (char ch : br.readLine().toCharArray()) {
-                answer = switch (ch) {
-                    case 'w' -> "chunbae";
-                    case 'b' -> "nabi";
-                    case 'g' -> "yeongcheol";
-                    default -> answer;
-                };
+        boolean found = false;
+
+        for (int i = 0; i < 15 && !found; i++) {
+            String line = br.readLine();
+            if (line == null || line.isEmpty()) {
+                continue;
+            }
+
+            for (char pixel : line.toCharArray()) {
+                switch (pixel) {
+                    case 'w':
+                        answer = "chunbae";
+                        found = true;
+                        break;
+                    case 'b':
+                        answer = "nabi";
+                        found = true;
+                        break;
+                    case 'g':
+                        answer = "yeongcheol";
+                        found = true;
+                        break;
+                }
+                if (found) {
+                    break;
+                }
             }
         }
+
         bw.write(answer);
 
-        br.close();
         bw.close();
+        br.close();
     }
 }
