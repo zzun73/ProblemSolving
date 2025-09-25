@@ -10,7 +10,8 @@ public class Main {
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine(), " ");
-        String x = st.nextToken(), y = st.nextToken();
+        String x = st.nextToken();
+        String y = st.nextToken();
 
         boolean isNumber = true;
         for (char c : x.toCharArray()) {
@@ -18,11 +19,13 @@ public class Main {
                 isNumber = false;
             }
         }
+
         for (char c : y.toCharArray()) {
             if (!Character.isDigit(c)) {
                 isNumber = false;
             }
         }
+
         if (!isNumber) {
             bw.write("NaN");
         } else {
